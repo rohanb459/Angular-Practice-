@@ -2,6 +2,7 @@
     angular.module("myApp", [])
     .controller("myController", myController)
     .filter("loves", lovesFilter)
+    .filter('truth', TruthFilter);
 
     myController.$inject = ["$scope", "lovesFilter"];
 
@@ -35,6 +36,16 @@
         {
             input = input || "";
             input = input.replace("likes", "loves");
+            return input;
+        }
+    }
+
+    function TruthFilter()
+    {
+        return function(input, target, replace)
+        {
+            input = input ||"";
+            input = input.replace(target, replace);
             return input;
         }
     }
