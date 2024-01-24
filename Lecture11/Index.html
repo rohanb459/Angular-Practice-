@@ -11,8 +11,14 @@
     <h1>Expressions and Interpolation</h1>
     <div ng-controller="myController">
         <button ng-click="changePicture()">Change Picture</button>
-
+        <div>Cost of this Picture: {{cost | currency: "Rs " : 4}}</div>
         <img ng-src="image{{picNumber}}.jpg">
+
+        <div>
+            Original Message: {{sayMessage()}} <br/>
+            Here is love Message:
+            {{sayLovesMessage()}}
+        </div>
     </div>
 </body>
 </html>
