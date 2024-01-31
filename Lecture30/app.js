@@ -7,7 +7,7 @@
     .service("WeightLossFilterService", WeightLossFilterService);
 
     ShoppingListController.$inject = ["ShoppingListService"];
-    function ShoppingListController(ShoppingListController){ 
+    function ShoppingListController(ShoppingListService){ 
         var list = this;
 
         list.items = ShoppingListService.getItems();
@@ -77,25 +77,42 @@
 
         var items=[];
 
+        // service.addItem = function(name, quantity){
+        //     var promise = WeightLossFilterService.checkName(name);
+
+        //     promise.then(function(response){
+        //         var nextPromise = WeightLossFilterService.checkQuantity(quantity);
+
+        //         nextPromise.then(function(result){
+        //             var item = {
+        //                 name: name,
+        //                 quantity: quantity
+        //             };
+        //             items.push(item);
+        //         }, function(errorResponse){
+        //             console.log(errorResponse.message);
+        //         })
+        //     }, function(errorResponse){
+        //         console.log(errorResponse.message);
+        //     })
+        // }
+
         service.addItem = function(name, quantity){
-            var promise = WeightLossFilterService.checkName(name);
+            var namePromise = WeightLossFilterService.checkName(name);
+            var quantityPromise = WeightLossFilterService.checkQuantity(quantity);
 
-            promise.then(function(response){
-                var nextPromise = WeightLossFilterService.checkQuantity(quantity);
-
-                nextPromise.then(function(result){
-                    var item = {
-                        name: name,
-                        quantity: quantity
-                    };
-                    items.push(item);
-                }, function(errorResponse){
-                    console.log(errorResponse.message);
-                })
-            }, function(errorResponse){
-                console.log(errorResponse.message);
+            $q.all([namePromise, quantityPromise]).
+            then(function(response){
+                var item={
+                    name: name,
+                    quantity: quantity
+                };
+                items.push(item);
             })
-        }
+            .catch(function(errorResponse){
+                console.log(errorResponse.message);
+            });
+        };
 
         service.getItems=function(){
             return items;
